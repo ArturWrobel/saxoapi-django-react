@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import ApexChart from './ApexChart'
+
+import { Space, Card } from 'antd';
+import CardList from './CardList'
 
 export class FetchData extends Component {
 
@@ -39,11 +41,15 @@ export class FetchData extends Component {
         
         return (
             <div>
+                <CardList/>
+                <br/>
                 <div>
                 {this.state.loading || !this.state.dane ? (
                     <div>Loading...</div>
                 ) : (
                         <div>
+                            <p>Account value: {this.state.portfolio[0]['AccountValue']}</p>
+                            <p>Account value month: {this.state.portfolio[0]['AccountValueMonth']}</p>
                             {tran}
                             <br />
                             {this.state.dane.Time[0]}
@@ -64,8 +70,7 @@ export class FetchData extends Component {
                         </div>
                     )}
                 </div>
-                <ApexChart/>
-
+                
 
             </div>
         )

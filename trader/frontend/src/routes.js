@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route } from 'react-router-dom'
 
-import ArticleList from './containers/ArticleListView';
-import ArticleDetail from './containers/ArticleDetailView';
+import ApexChart from './components/ApexChart'
+import FetchData from './components/Data'
 
 const BaseRouter = () => (
     <div>
-        <Route exact path="/" component={ArticleList}/>
-        <Route exact path="/" component={ArticleDetail}/>
+        <Route exact path="/" component={FetchData} />
+        <Route exact path="/chart" component={ApexChart}/>
     </div>
 )
 

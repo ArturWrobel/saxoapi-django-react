@@ -1,0 +1,23 @@
+body {
+    background: inherit;
+    font-family: arial, sans-serif;
+}
+
+.menu {
+    font-weight: 800;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 10px;
+    text-align: right;
+    padding-top: 0;
+    background-color: #dde0e6;
+    font-weight: 500;
+}
+
+.content {
+    padding: 0 50px;
+}

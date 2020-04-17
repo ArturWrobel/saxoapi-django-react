@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import BaseRouter from './routes'
 
 import './App.css';
-import FetchData from './Data'
+//import FetchData from './Data'
 import 'antd/dist/antd.css';
 import CustomLayout from './containers/Layout';
 
@@ -12,7 +12,7 @@ function App() {
     <div className="App">
       <Router>
       <CustomLayout>
-      <FetchData/>
+      <BaseRouter/>
       </CustomLayout>
       </Router>
     </div>
