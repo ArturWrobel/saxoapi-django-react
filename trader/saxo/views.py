@@ -6,6 +6,7 @@ from django.views.generic import View
 
 from saxo_openapi import API
 import saxo_openapi.endpoints.rootservices as rs
+import saxo_openapi.endpoints.accounthistory as ah
 import saxo_openapi.endpoints.chart as chart
 from pprint import pprint
 import json
@@ -15,13 +16,20 @@ from django.http import JsonResponse
 
 """ def index(request):
     return render(request, 'frontend/index.html') """
-
+    
+ClientKey = "|y06GmvdoRNnrAh9aXBJew=="    
+with open ('./saxo/data/token/tok.txt', 'r') as f:
+    token = f.read().strip()
+token = f"{token}"
+client = API(access_token=token)
+klient = client
+ 
 def get_saxo_data():
-        with open ('./saxo/data/token/tok.txt', 'r') as f:
+        """ with open ('./saxo/data/token/tok.txt', 'r') as f:
             token = f.read().strip()
 
         token = f"{token}"
-        client = API(access_token=token)
+        client = API(access_token=token) """
 
         # lets make a diagnostics request, it should return '' with a state 200
         r = rs.diagnostics.Get()
@@ -72,5 +80,19 @@ class ChartData(APIView):
     permission_classes = []
     
     def get(self, request, format = None):
-        
         return Response(get_saxo_data())
+    
+class Portfolio(APIView):
+    
+    def portfolio(klient, ClientKey):
+        client = klient
+        ClientKey = ClientKey
+        r = ah.accountvalues.AccountSummary(ClientKey=ClientKey)
+        client.request(r)
+        data = json.dumps(r.response, indent=2)
+        data = json.loads(data)
+        print("ZZZZZZZZZZZZZZZZZZZZZZ", type(data))
+        return data["Data"]
+    
+    def get(self, request, format = None):
+        return Response(Portfolio.portfolio(klient, ClientKey))

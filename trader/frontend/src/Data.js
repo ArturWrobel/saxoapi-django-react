@@ -7,13 +7,20 @@ export class FetchData extends Component {
     state = {
         loading: true,
         dane: null,
-        numbers: [1, 2, 3, 4, 5]     
+        numbers: [1, 2, 3, 4, 5],
+        portfolio: null
+
     }
 
     async componentDidMount() {
         axios.get("http://127.0.0.1:8000/api/chart/data/").then(res => {
             this.setState({ dane: res.data, loading: false });
             console.log(res.data.CloseAsk[0]);
+        })
+
+        axios.get("http://127.0.0.1:8000/api/portfolio/").then(res => {
+            this.setState({ portfolio: res.data, loading: false });
+            console.log(res.data[0]['AccountValue']);
         })
     }
     
