@@ -49,7 +49,7 @@ def get_saxo_data():
         params = {
                 "AssetType": "FxSpot",
                 "Horizon": 5,
-                "Count": 10,
+                "Count": 100,
                 "Uic": 18
                 }
                 
@@ -76,8 +76,6 @@ def get_data(request, *args, **kwargs):
     return JsonResponse(data, safe=False)
 
 class ChartData(APIView):
-    authentication_classes = []
-    permission_classes = []
     
     def get(self, request, format = None):
         return Response(get_saxo_data())
@@ -91,7 +89,6 @@ class Portfolio(APIView):
         client.request(r)
         data = json.dumps(r.response, indent=2)
         data = json.loads(data)
-        print("ZZZZZZZZZZZZZZZZZZZZZZ", type(data))
         return data["Data"]
     
     def get(self, request, format = None):

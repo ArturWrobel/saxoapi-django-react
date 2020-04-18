@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom'
 
 import './Layout.css'
@@ -7,12 +7,13 @@ import './Layout.css'
 const { Header, Content, Footer } = Layout;
 
 const CustomLayout = (props) => {
+    let date = new Date().toLocaleString()
     
     return (
         <Layout className="layout">
             <Header>
                 <div className="logo" />
-                <Menu className="menu" theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+                <Menu className="menu top" theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
                     <Menu.Item key="1"><Link to = "/">Home</Link></Menu.Item>
                     <Menu.Item key="2"><Link to = "/chart">Chart</Link></Menu.Item>
                     <Menu.Item key="3">Backend</Menu.Item>
@@ -28,7 +29,7 @@ const CustomLayout = (props) => {
                     {props.children}
                 </div>
             </Content>
-            <Footer className="footer">Created by ARW ©2020</Footer>
+            <Footer className="footer"> <div className = "container"> <div>{"Time: " + date}</div> <div>Created by ARW ©2020</div> </div>  </Footer>
         </Layout>
     )
 }

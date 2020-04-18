@@ -4,7 +4,7 @@ body {
 }
 
 .menu {
-    font-weight: 800;
+    font-weight: 700;
 }
 
 .footer {
@@ -12,12 +12,19 @@ body {
     bottom: 0;
     width: 100%;
     height: 10px;
-    text-align: right;
     padding-top: 0;
     background-color: #dde0e6;
-    font-weight: 500;
+    font-weight: 600;
+    color: rgb(133, 123, 123);
+    justify-content: center;
 }
 
 .content {
     padding: 0 50px;
+}
+
+.container {
+    display: flex;  
+    flex-direction: row;
+    justify-content: space-between;
 }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
-import { Space, Card } from 'antd';
 import CardList from './CardList'
 
 export class FetchData extends Component {
@@ -34,6 +33,7 @@ export class FetchData extends Component {
 } */
 
     render() {
+
         const doubled = this.state.numbers.map(number => number * 2 + " ");
 
         let tran = Array(this.state.numbers.map(x => x*5))
