@@ -24,7 +24,7 @@ token = f"{token}"
 client = API(access_token=token)
 klient = client
  
-def get_saxo_data():
+def get_saxo_data(cross, horiz):
         """ with open ('./saxo/data/token/tok.txt', 'r') as f:
             token = f.read().strip()
 
@@ -48,9 +48,9 @@ def get_saxo_data():
 
         params = {
                 "AssetType": "FxSpot",
-                "Horizon": 5,
-                "Count": 100,
-                "Uic": 18
+                "Horizon": horiz,
+                "Count": 10,
+                "Uic": cross
                 }
                 
         c = chart.charts.GetChartData(params=params)
@@ -77,8 +77,8 @@ def get_data(request, *args, **kwargs):
 
 class ChartData(APIView):
     
-    def get(self, request, format = None):
-        return Response(get_saxo_data())
+    def get(self, request, cross, horiz, format = None):
+        return Response(get_saxo_data(cross, horiz))
     
 class Portfolio(APIView):
     

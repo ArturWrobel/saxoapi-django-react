@@ -14,7 +14,7 @@ export class FetchData extends Component {
     }
 
     async componentDidMount() {
-        axios.get("http://127.0.0.1:8000/api/chart/data/").then(res => {
+        axios.get("http://127.0.0.1:8000/api/chart/data/18/5/").then(res => {
             this.setState({ dane: res.data, loading: false });
             console.log(res.data.CloseAsk[0]);
         })
@@ -25,13 +25,6 @@ export class FetchData extends Component {
         })
     }
     
-    /* buildArrays() {
-    const series = [];
-    series.push(this.state.numbers.map(x => x*2))
-    console.log(series)
-    return series
-} */
-
     render() {
 
         const doubled = this.state.numbers.map(number => number * 2 + " ");

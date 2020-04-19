@@ -4,7 +4,7 @@ trader/frontend/build/
 trader/frontend/node_modules/
 trader/frontend/public/robots.txt
 trader/saxo/__pycache__/
+trader/saxo/data/
 trader/saxo/migrations/
 trader/trader/__pycache__/
 trader/trader/db.sqlite3
-
