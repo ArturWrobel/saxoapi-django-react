@@ -47,19 +47,19 @@ export class FetchData extends Component {
                             <br />
                             {this.state.dane.Time[0]}
                             <br />
-                            {this.state.dane.CloseBid[0]}
+                            {this.state.dane.CloseAsk[0]}
                             <br/>
-                            {this.state.dane.CloseBid.map((bid, i) => <li key ={i}>{bid}</li>)}
+                            {this.state.dane.CloseAsk.map((bid, i) => <li key ={i}>{bid}</li>)}
                             <br />
                             {this.state.dane.Time}
                             <br />
-                            {this.state.dane.CloseBid}
+                            {this.state.dane.CloseAsk}
                             <hr />
                             {doubled}
                             <hr />
                             {this.state.dane.CloseAsk.map((item, index) =><div key ={index}>{item}</div>)}
                             <hr />
-                            {this.state.dane.CloseBid.length}
+                            {this.state.dane.CloseAsk.length}
                         </div>
                     )}
                 </div>

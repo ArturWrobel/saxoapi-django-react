@@ -62,7 +62,6 @@ export class ApexChart extends Component {
         axios.get(`http://127.0.0.1:8000/api/chart/data/${num}/${this.state.mins}`).then(res => {
             this.setState({ loading: false, series: [{ data: transformState(res.data) }] });
 
-
             function transformState(xxx) {
                 var transformed = []
                 for (var k = 0; k < xxx.Time.length; k++) {
@@ -91,10 +90,16 @@ export class ApexChart extends Component {
                 this.setState({ mins: 60 });
                 break;
             case 3:
-                this.setState({ mins: 30 });
+                this.setState({ mins: 240 });
                 break;
             case 4:
-                this.setState({ mins: 15 });
+                this.setState({ mins: 1440 });
+                break;
+            case 5:
+                this.setState({ mins: 10080 });
+                break;
+            case 6:
+                this.setState({ mins: 43200 });
                 break;
             default:
                 this.setState({ mins: 5 });
@@ -115,10 +120,12 @@ export class ApexChart extends Component {
                     <h1>Loading...</h1> :
                     <div>
                         <Radio.Group onChange={this.onChange} value={this.state.value}>
-                            <Radio value={1}>5 Min</Radio>
-                            <Radio value={2}>Hourly</Radio>
-                            <Radio value={3}>Daily</Radio>
-                            <Radio value={4}>Weekly</Radio>
+                            <Radio value={1}>5M</Radio>
+                            <Radio value={2}>Hour</Radio>
+                            <Radio value={3}>4H</Radio>
+                            <Radio value={4}>Day</Radio>
+                            <Radio value={5}>Week</Radio>
+                            <Radio value={6}>Month</Radio>
                         </Radio.Group>
                         <Card>
                             <Card.Grid style={gridStyle} onClick={this.onSubmitCross(1343)}>EURPLN</Card.Grid>
