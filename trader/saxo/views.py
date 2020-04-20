@@ -49,7 +49,7 @@ def get_saxo_data(cross, horiz):
         params = {
                 "AssetType": "FxSpot",
                 "Horizon": horiz,
-                "Count": 10,
+                "Count": 100,
                 "Uic": cross
                 }
                 
