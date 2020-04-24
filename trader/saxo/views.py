@@ -19,73 +19,78 @@ from django.http import JsonResponse
 
 """ def index(request):
     return render(request, 'frontend/index.html') """
-    
-ClientKey = "|y06GmvdoRNnrAh9aXBJew=="    
-with open ('./saxo/data/token/tok.txt', 'r') as f:
+
+ClientKey = "|y06GmvdoRNnrAh9aXBJew=="
+with open('./saxo/data/token/tok.txt', 'r') as f:
     token = f.read().strip()
 token = f"{token}"
 client = API(access_token=token)
 klient = client
- 
+
+
 def get_saxo_data(cross, horiz):
-        """ with open ('./saxo/data/token/tok.txt', 'r') as f:
-            token = f.read().strip()
+    """ with open ('./saxo/data/token/tok.txt', 'r') as f:
+        token = f.read().strip()
 
-        token = f"{token}"
-        client = API(access_token=token) """
+    token = f"{token}"
+    client = API(access_token=token) """
 
-        # lets make a diagnostics request, it should return '' with a state 200
-        r = rs.diagnostics.Get()
-        print("request is: ", r)
-        rv = client.request(r)
-        assert rv is None and r.status_code == 200
-        print('diagnostics passed')
+    # lets make a diagnostics request, it should return '' with a state 200
+    r = rs.diagnostics.Get()
+    print("request is: ", r)
+    rv = client.request(r)
+    assert rv is None and r.status_code == 200
+    print('diagnostics passed')
 
-        # request available rootservices-features
-        r = rs.features.Availability()
-        rv = client.request(r)
-        print("request is: ", r)
-        print("response: ")
-        pprint(rv, indent=2)
-        print(r.status_code)
+    # request available rootservices-features
+    r = rs.features.Availability()
+    rv = client.request(r)
+    print("request is: ", r)
+    print("response: ")
+    pprint(rv, indent=2)
+    print(r.status_code)
 
-        params = {
-                "AssetType": "FxSpot",
-                "Horizon": horiz,
-                "Count": 100,
-                "Uic": cross
-                }
-                
-        c = chart.charts.GetChartData(params=params)
-        z = client.request(c)
-        data = json.dumps(z, indent=2)
-        data = json.loads(data)
-        #print(data)
-        #print("================================")
+    params = {
+        "AssetType": "FxSpot",
+        "Horizon": horiz,
+        "Count": 100,
+        "Uic": cross
+    }
 
-        if r.status_code == 200:
-            print("Gate open and data retrived!")
-            df = pd.DataFrame(data['Data'])
-            df[['Time', 'Reszta']] = df.Time.str.split(".", expand= True)
-            df = df.drop('Reszta', 1)
-            df.Time = df.Time.apply(pd.to_datetime)
-            #df.set_index('Time', inplace=True)
-            df.drop(["CloseBid","HighBid","LowBid","OpenBid"], axis=1, inplace=True)
-            df.to_csv('./saxo/data/data.csv')
-            print(df)
-        return df    
+    c = chart.charts.GetChartData(params=params)
+    z = client.request(c)
+    data = json.dumps(z, indent=2)
+    data = json.loads(data)
+    # print(data)
+    # print("================================")
 
-def get_data(request, *args, **kwargs):    
+    if r.status_code == 200:
+        print("Gate open and data retrived!")
+        df = pd.DataFrame(data['Data'])
+        df[['Time', 'Reszta']] = df.Time.str.split(".", expand=True)
+        df = df.drop('Reszta', 1)
+        df.Time = df.Time.apply(pd.to_datetime)
+        #df.set_index('Time', inplace=True)
+        df.drop(["CloseBid", "HighBid", "LowBid",
+                 "OpenBid"], axis=1, inplace=True)
+        df.to_csv('./saxo/data/data.csv')
+        print(df)
+    return df
+
+
+def get_data(request, *args, **kwargs):
     data = get_saxo_data()
     return JsonResponse(data, safe=False)
 
+
 class ChartData(APIView):
-    
-    def get(self, request, cross, horiz, format = None):
+
+    def get(self, request, cross, horiz, format=None):
         return Response(get_saxo_data(cross, horiz))
-    
+
+
 class Portfolio(APIView):
-    
+
     def portfolio(klient, ClientKey):
         client = klient
         ClientKey = ClientKey
@@ -94,63 +99,107 @@ class Portfolio(APIView):
         data = json.dumps(r.response, indent=2)
         data = json.loads(data)
         return data["Data"]
-    
-    def get(self, request, format = None):
+
+    def get(self, request, format=None):
         return Response(Portfolio.portfolio(klient, ClientKey))
 
 
-""" import http.client
-
-class RakutenData(APIView):
-    
-    def get_rakuten_data(self):
-        conn = http.client.HTTPSConnection("apidojo-yahoo-finance-v1.p.rapidapi.com")
-
-        headers = {
-            'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com",
-            'x-rapidapi-key': "2b53134734mshf846a678c1ebc88p1e490ejsn6e701a2b2ab3"
-            }
-
-        conn.request("GET", "/market/get-movers?start=3&count=3&region=US&lang=en", headers=headers)
-
-        res = conn.getresponse()
-        data = res.read()
-        data = json.loads(data)
-
-        return data
-    
-    def get(self, request, format = None):
-        return Response(RakutenData.get_rakuten_data(self)) """
-    
 class YahooData(APIView):
-    
-    def get_yahoo_data(self):
-        aapl = yf.Ticker("AAPL")
-        #print(aapl.options)
-        opt= aapl.options
-        print(type(opt))
-        print(opt[0])
-        
-        opt1 = aapl.option_chain('2020-04-24')
-        print(opt1)
-        #data = opt
-        opt1 = json.dumps(opt1, indent=2)
-        opt1 = json.loads(opt1)
+    def __init__(self, stock):
+        self.stock = stock
+
+    def get_yahoo_data(stock):
+        aapl = yf.Ticker("{}".format(stock))
+        # print(aapl.options)
+        expiries = aapl.options
+        print(expiries)
+        opt1 = aapl.option_chain('2020-05-01')
+        calls = opt1.calls
+        # print(calls)
+        print(calls.columns)
+
+        opt = calls.to_json()
+        #opt = json.dumps(opt)
+        opt = json.loads(opt)
         print(opt)
+        print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
         print(type(opt))
-        
+
         return opt
-    
-    def get(self, request, format = None):
-        return Response(YahooData.get_yahoo_data(self))
-    
+
+    def get(self, request, format=None):
+        return Response(self.get_yahoo_data(stock))
+
+
 def get_sp500(request, *args, **kwargs):
-    sp = pd.read_html("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")
+    sp = pd.read_html(
+        "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")
     x = sp[0]["Symbol"]
     x = x.to_list()
     x = json.dumps(x, indent=2)
     x = json.loads(x)
     print(type(x))
     return JsonResponse(x, safe=False)
+
+
+def get_expiry(request, name):
+    tick = yf.Ticker("{}".format(name))
+    expiries = tick.options
+    expiries = json.dumps(expiries)
+    expiries = json.loads(expiries)
+
+    chain = tick.option_chain('2020-05-01')
+    calls = chain.calls
+    calls = calls.to_json()
+    calls = json.loads(calls)
+
+    return JsonResponse(expiries, safe=False)
+
+
+""" def get_yahoo_data(request, stock, exp):
+    aapl = yf.Ticker("{}".format(stock))
+    expiries = aapl.options
+    opt1 = aapl.option_chain(expiries[exp])
+    calls = opt1.calls.fillna(0)
+
+    out = {"strike": calls['strike'].values.tolist(), "bid": calls['bid'].values.tolist(), "ask": calls['ask'].values.tolist(),
+           "openInterest": calls['openInterest'].values.tolist(), "volume": calls['volume'].values.tolist(), "inTheMoney": calls['inTheMoney'].values.tolist()}
+    out = json.dumps(out)
+    print(out)
+    print(type(out))
+
+    print(calls.columns)
+    opt = calls.to_json()
+    opt = json.loads(opt)
+    print(type(opt))
+    print(opt)
+    return JsonResponse(opt, safe=False) """
+
+
+def get_yahoo_data(request, stock, exp):
+    ticker = yf.Ticker("{}".format(stock))
+
+    info = ticker.info
+    """ print(list(info.keys()))
+    print(info['shortName']) """
+
+    expiries = ticker.options
+    opt = ticker.option_chain(expiries[exp])
+    calls = opt.calls
+    puts = opt.puts
+
+    out = [calls['strike'], calls['bid'], calls['ask'], calls['openInterest'], calls['volume'], calls['inTheMoney'],
+            puts['strike'], puts['bid'], puts['ask'], puts['openInterest'], puts['volume'], puts['inTheMoney'], ]
+    out = list(map(lambda x: x.fillna(0).values.tolist(), out))
+    out = {"name": info["shortName"], "expiry": expiries, "previous": info["previousClose"], "bid": info['bid'], "sharesShort": info['sharesShort'],
+            "sharesPercentSharesOut": info['sharesPercentSharesOut'], "priceToBook": info['priceToBook'], "shortRatio": info['shortRatio'],
+            "morningStarOverallRating": info['morningStarOverallRating'], "shortPercentOfFloat": info['shortPercentOfFloat'],
+            "Cstrike": out[0], "Cbid": out[1], "Cask": out[2], "CopenInterest": out[3], "Cvolume": out[4], "CinTheMoney": out[5],
+            "Pstrike": out[6], "Pbid": out[7], "Pask": out[8], "PopenInterest": out[9], "Pvolume": out[10], "PinTheMoney": out[11]}
+
+    out = json.dumps(out)
+    #out = json.loads(out)
+    print(out)
+    print(type(out))
     
-    
+    return JsonResponse(out, safe=False)

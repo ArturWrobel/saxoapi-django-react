@@ -119,6 +119,7 @@ export class ApexChart extends Component {
                 {this.state.loading ?
                     <h1>Loading...</h1> :
                     <div>
+                        <br/>
                         <Radio.Group onChange={this.onChange} value={this.state.value}>
                             <Radio value={1}>5M</Radio>
                             <Radio value={2}>Hour</Radio>
