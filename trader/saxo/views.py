@@ -156,33 +156,39 @@ def get_expiry(request, name):
     return JsonResponse(expiries, safe=False)
 
 
-""" def get_yahoo_data(request, stock, exp):
-    aapl = yf.Ticker("{}".format(stock))
-    expiries = aapl.options
-    opt1 = aapl.option_chain(expiries[exp])
-    calls = opt1.calls.fillna(0)
+def get_yahoo_data(request, stock, exp):
+    ticker = yf.Ticker("{}".format(stock))
+    expiries = ticker.options
+    option = ticker.option_chain(expiries[exp])
+    calls = option.calls.fillna(0)
+    puts = option.puts.fillna(0)
 
     out = {"strike": calls['strike'].values.tolist(), "bid": calls['bid'].values.tolist(), "ask": calls['ask'].values.tolist(),
            "openInterest": calls['openInterest'].values.tolist(), "volume": calls['volume'].values.tolist(), "inTheMoney": calls['inTheMoney'].values.tolist()}
+    
+    out = [calls['strike'], calls['bid'], calls['ask'], calls['openInterest'], calls['volume'], calls['inTheMoney'],
+            puts['strike'], puts['bid'], puts['ask'], puts['openInterest'], puts['volume'], puts['inTheMoney'], ]
+    out = list(map(lambda x: x.fillna(0).values.tolist(), out))
+    
+    out = {"expiry": expiries,
+            "Cstrike": out[0], "Cbid": out[1], "Cask": out[2], "CopenInterest": out[3], "Cvolume": out[4], "CinTheMoney": out[5],
+            "Pstrike": out[6], "Pbid": out[7], "Pask": out[8], "PopenInterest": out[9], "Pvolume": out[10], "PinTheMoney": out[11]}
+
     out = json.dumps(out)
+    out = json.loads(out)
+
     print(out)
     print(type(out))
-
-    print(calls.columns)
-    opt = calls.to_json()
-    opt = json.loads(opt)
-    print(type(opt))
-    print(opt)
-    return JsonResponse(opt, safe=False) """
+    print(out.keys())
+    
+    return JsonResponse(out, safe=False)
 
 
-def get_yahoo_data(request, stock, exp):
+def xget_yahoo_data(request, stock, exp):
     ticker = yf.Ticker("{}".format(stock))
 
     info = ticker.info
-    """ print(list(info.keys()))
-    print(info['shortName']) """
-
+    
     expiries = ticker.options
     opt = ticker.option_chain(expiries[exp])
     calls = opt.calls
@@ -190,16 +196,21 @@ def get_yahoo_data(request, stock, exp):
 
     out = [calls['strike'], calls['bid'], calls['ask'], calls['openInterest'], calls['volume'], calls['inTheMoney'],
             puts['strike'], puts['bid'], puts['ask'], puts['openInterest'], puts['volume'], puts['inTheMoney'], ]
+    
+    print(out, "ooooooooooooooooooooooooooooooooooo")
+    
     out = list(map(lambda x: x.fillna(0).values.tolist(), out))
-    out = {"name": info["shortName"], "expiry": expiries, "previous": info["previousClose"], "bid": info['bid'], "sharesShort": info['sharesShort'],
+    """ out = {"name": info["shortName"], "expiry": expiries, "previous": info["previousClose"], "bid": info['bid'], "sharesShort": info['sharesShort'],
             "sharesPercentSharesOut": info['sharesPercentSharesOut'], "priceToBook": info['priceToBook'], "shortRatio": info['shortRatio'],
-            "morningStarOverallRating": info['morningStarOverallRating'], "shortPercentOfFloat": info['shortPercentOfFloat'],
+            "shortPercentOfFloat": info['shortPercentOfFloat'],
             "Cstrike": out[0], "Cbid": out[1], "Cask": out[2], "CopenInterest": out[3], "Cvolume": out[4], "CinTheMoney": out[5],
-            "Pstrike": out[6], "Pbid": out[7], "Pask": out[8], "PopenInterest": out[9], "Pvolume": out[10], "PinTheMoney": out[11]}
+            "Pstrike": out[6], "Pbid": out[7], "Pask": out[8], "PopenInterest": out[9], "Pvolume": out[10], "PinTheMoney": out[11]} """
+
+    out = { "Cstrike": out[0], "Cbid": out[1], "Cask": out[2], "CopenInterest": out[3], "Cvolume": out[4], "CinTheMoney": out[5]}
+    print(out, "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
 
     out = json.dumps(out)
-    #out = json.loads(out)
+    out = json.loads(out)
     print(out)
     print(type(out))
-    
     return JsonResponse(out, safe=False)
