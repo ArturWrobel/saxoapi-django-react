@@ -10,6 +10,8 @@ import saxo_openapi.endpoints.accounthistory as ah
 import saxo_openapi.endpoints.chart as chart
 
 import yfinance as yf
+import requests
+from bs4 import BeautifulSoup
 
 from pprint import pprint
 import json
@@ -157,6 +159,21 @@ def get_expiry(request, name):
 
 
 def get_yahoo_data(request, stock, exp):
+    
+    def yahoo_page_scrap(name):
+        url = f"https://finance.yahoo.com/quote/{stock}?p={stock}&.tsrc=fin-srch"
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text,'lxml')
+        name = soup.find_all('div', {'D(ib) Mt(-5px) Mend(20px) Maw(56%)--tab768 Maw(52%) Ov(h) smartphone_Maw(85%) smartphone_Mend(0px)'})[0].find('h1').text
+        price = float(soup.find_all('div', {'My(6px) Pos(r) smartphone_Mt(6px)'})[0].find('span').text)
+        previous = float(soup.find_all('td', {'Ta(end) Fw(600) Lh(14px)'})[0].find('span').text)
+        days_range = soup.find(id = "quote-summary").find_all('tr', 'Bxz(bb) Bdbw(1px) Bdbs(s) Bdc($seperatorColor) H(36px)')[4].text
+        ex_div = soup.find(id = "quote-summary").find_all('tr', 'Bxz(bb) Bdbw(1px) Bdbs(s) Bdc($seperatorColor) H(36px)')[13].text
+        change = round((price - previous)/previous*100,2)
+        return [name, price, previous, change, days_range, ex_div]
+    
+    info = yahoo_page_scrap(stock)
+    
     ticker = yf.Ticker("{}".format(stock))
     expiries = ticker.options
     option = ticker.option_chain(expiries[exp])
@@ -170,7 +187,7 @@ def get_yahoo_data(request, stock, exp):
             puts['strike'], puts['bid'], puts['ask'], puts['openInterest'], puts['volume'], puts['inTheMoney'], ]
     out = list(map(lambda x: x.fillna(0).values.tolist(), out))
     
-    out = {"expiry": expiries,
+    out = { "expiry": expiries, "info": info,
             "Cstrike": out[0], "Cbid": out[1], "Cask": out[2], "CopenInterest": out[3], "Cvolume": out[4], "CinTheMoney": out[5],
             "Pstrike": out[6], "Pbid": out[7], "Pask": out[8], "PopenInterest": out[9], "Pvolume": out[10], "PinTheMoney": out[11]}
 

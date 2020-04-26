@@ -13,7 +13,7 @@ export class Options extends Component {
         Pstrikes: [],
     }
 
-    callAxios (name, num) {
+    callAxios(name, num) {
         axios.get(`http://127.0.0.1:8000/api/yahoo/${name}/${num}/`).then(res => {
             this.setState({
                 loading: false, expiry: res.data.expiry,
@@ -23,12 +23,14 @@ export class Options extends Component {
                 CopenInterest: res.data.CopenInterest, PopenInterest: res.data.PopenInterest,
                 Cvolume: res.data.Cvolume, Pvolume: res.data.Pvolume,
                 CinTheMoney: res.data.CinTheMoney, PinTheMoney: res.data.PinTheMoney,
+                info: res.data.info
             });
             console.log("Zaladowano: ");
             console.log(res.data);
             console.log("Stan po: ")
             console.log(this.state)
             console.log(this.state.strikes)
+            console.log(this.state.info)
         })
 
     }
@@ -93,7 +95,20 @@ export class Options extends Component {
                 {this.state.loading ?
                     <h1>Loading...</h1> :
                     <div>
-                        <Divider orientation="centre">Chose stock and expiry:</Divider>
+                        <br />
+                        <Row justify="space-between">
+                            <Col span={3}><h3>Price: {this.state.info[1]}</h3></Col>
+                            <Col span={3}><h3>Previous: {this.state.info[2]}</h3></Col>
+                            <Col span={2}><h3>Change: {this.state.info[3]}%</h3></Col>
+                            <Col span={4}><h2>{this.state.info[0]}</h2></Col>
+                            <Col span={3}>{this.state.info[4]}</Col>
+                            <Col span={3}>{this.state.info[5]}</Col>
+                            <Col span={2}>
+                                <Dropdown overlay={menu} placement="bottomCenter">
+                                    <Button>{this.state.expiry[this.state.no_exp]}</Button>
+                                </Dropdown>
+                            </Col>
+                        </Row>
                         <Row>
                             <Col span={24}>
                                 <Card>
@@ -101,14 +116,8 @@ export class Options extends Component {
                                 </Card>
                             </Col>
                         </Row>
-                        <Divider orientation="left">
-                            <Dropdown overlay={menu} placement="bottomCenter">
-                                <Button>{this.state.expiry[this.state.no_exp]}</Button>
-                            </Dropdown>
-                Company: (Price)
-                </Divider>
                         {<Row>
-                            <Col span={2}/>
+                            <Col span={2} />
                             <Col span={2}>
                                 <List
                                     size="small"
@@ -154,7 +163,7 @@ export class Options extends Component {
                                     renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
                                 />
                             </Col>
-                            <Col span={1}/>
+                            <Col span={1} />
                             <Col span={2}>
                                 <List
                                     size="small"
@@ -200,7 +209,7 @@ export class Options extends Component {
                                     renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
                                 />
                             </Col>
-                            <Col span={2}/>
+                            <Col span={2} />
                         </Row>}
                     </div>}
             </div>
