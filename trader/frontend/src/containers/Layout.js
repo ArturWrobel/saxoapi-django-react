@@ -11,7 +11,7 @@ const CustomLayout = (props) => {
     
     return (
         <Layout className="layout">
-            <Header>
+            <Header className="header">
                 <div className="logo" />
                 <Menu className="menu top" theme="dark" mode="horizontal" >
                     <Menu.Item key="1"><Link to = "/">Home</Link></Menu.Item>
@@ -20,11 +20,6 @@ const CustomLayout = (props) => {
                 </Menu>
             </Header>
             <Content className = "content">
-                {/* <Breadcrumb style={{ margin: '16px 0' }}>
-                    <Breadcrumb.Item><Link to = "/">Home</Link></Breadcrumb.Item>
-                    <Breadcrumb.Item><Link to = "/chart">Chart</Link></Breadcrumb.Item>
-                    <Breadcrumb.Item>Backend</Breadcrumb.Item>
-                </Breadcrumb> */}
                 <div className="site-layout-content">
                     {props.children}
                 </div>

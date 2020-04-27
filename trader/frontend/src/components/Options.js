@@ -1,36 +1,42 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { List, Divider, Row, Col, Card, Dropdown, Menu, message, Button } from 'antd';
+import { List, Row, Col, Card, Dropdown, Menu, Button, Divider } from 'antd';
 /* import Strikes from './Strikes' */
 
 export class Options extends Component {
     state = {
         loading: true,
-        name: "mmm",
+        name: "C",
         expiry: [],
         no_exp: 0,
-        Cstrikes: [],
-        Pstrikes: [],
     }
 
     callAxios(name, num) {
         axios.get(`http://127.0.0.1:8000/api/yahoo/${name}/${num}/`).then(res => {
             this.setState({
                 loading: false, expiry: res.data.expiry,
+                info: res.data.info,
+                name: name,
+                no_exp: num,
+
                 Cstrikes: res.data.Cstrike, Pstrikes: res.data.Pstrike,
                 Cbid: res.data.Cbid, Pbid: res.data.Pbid,
                 Cask: res.data.Cask, Pask: res.data.Pask,
                 CopenInterest: res.data.CopenInterest, PopenInterest: res.data.PopenInterest,
                 Cvolume: res.data.Cvolume, Pvolume: res.data.Pvolume,
-                CinTheMoney: res.data.CinTheMoney, PinTheMoney: res.data.PinTheMoney,
-                info: res.data.info
+
+                XCstrikes: res.data.XCstrike, XPstrikes: res.data.XPstrike,
+                XCbid: res.data.XCbid, XPbid: res.data.XPbid,
+                XCask: res.data.XCask, XPask: res.data.XPask,
+                XCopenInterest: res.data.XCopenInterest, XPopenInterest: res.data.XPopenInterest,
+                XCvolume: res.data.XCvolume, XPvolume: res.data.XPvolume,
             });
-            console.log("Zaladowano: ");
+            /* console.log("Zaladowano: ");
             console.log(res.data);
             console.log("Stan po: ")
             console.log(this.state)
             console.log(this.state.strikes)
-            console.log(this.state.info)
+            console.log(this.state.info) */
         })
 
     }
@@ -49,27 +55,14 @@ export class Options extends Component {
     }
 
     onSubmitStock(newName) {
-        console.log("clicked func" + newName)
         this.callAxios(newName, this.state.no_exp)
     }
 
     handleButtonClick(index) {
-        message.info('Click on left button.' + index);
-        console.log('click left button', index);
         this.callAxios(this.state.name, index)
-
     }
 
-    /* listContracts = this.state.option.map(item => <li>{item}</li>) */
-
-
     render() {
-
-        const gridStyle = {
-            width: '10%',
-            textAlign: 'center',
-            background: "#dde0e6"
-        };
 
         const menu = (
             <Menu>
@@ -81,14 +74,8 @@ export class Options extends Component {
             </Menu>
         );
 
-        const stock = ["WFC", "SPY", "C", "GM", "CAT", "C", "GM", "CAT", "AAPL", "AAPL"]
-        const stocksMap = stock.map((item, index) => <Card.Grid style={gridStyle} key={index} onClick={() => this.onSubmitStock(item)}>{item}</Card.Grid>)
-
-        /* const display = Object.keys(this.state.option).map(key => {
-        return [...Array(this.state.option[key])].map(x => {return <p keys = {x}>{key[0]}</p>})
-        }) */
-        /* const strikes = [this.state.strikes.map((item) => <p> ooo {item}</p>)] */
-        /* const numberss = [this.state.expiry.map((item) => <p> {item} zzz {item}</p>)] */
+        const stock = ["C", "GM", "F", "CAT", "GE", "HAL", "BA", "IBM", "CSCO", "GS", "WFC", "BAC", "AAPL", "MMM", "TSLA", "FB", "AMZN", "NFLX", "SPY", "DIA"]
+        const stocksMap = stock.map((item, index) => <Card.Grid className = "gridStyle" key={index} onClick={() => this.onSubmitStock(item)}>{item}</Card.Grid>)
 
         return (
             <div>
@@ -96,32 +83,33 @@ export class Options extends Component {
                     <h1>Loading...</h1> :
                     <div>
                         <br />
-                        <Row justify="space-between">
+                        <Row justify="space-between" className ="sticky">
                             <Col span={3}><h3>Price: {this.state.info[1]}</h3></Col>
                             <Col span={3}><h3>Previous: {this.state.info[2]}</h3></Col>
-                            <Col span={2}><h3>Change: {this.state.info[3]}%</h3></Col>
-                            <Col span={4}><h2>{this.state.info[0]}</h2></Col>
+                            <Col span={2}><p>Change:<h3 style={{ color: this.state.info[3] < 0 ? "red" : "green" }}>{this.state.info[3]}%</h3></p></Col>
+                            <Col span={4}><h2 className="name">{this.state.info[0]}</h2></Col>
                             <Col span={3}>{this.state.info[4]}</Col>
                             <Col span={3}>{this.state.info[5]}</Col>
                             <Col span={2}>
                                 <Dropdown overlay={menu} placement="bottomCenter">
-                                    <Button>{this.state.expiry[this.state.no_exp]}</Button>
+                                    <Button className="change col">{this.state.expiry[this.state.no_exp]}</Button>
                                 </Dropdown>
                             </Col>
                         </Row>
                         <Row>
-                            <Col span={24}>
+                            <Col span={24} className="sticky1">
                                 <Card>
                                     {stocksMap}
                                 </Card>
                             </Col>
                         </Row>
-                        {<Row>
+                        <div className="raws">
+                        <Row>
                             <Col span={2} />
                             <Col span={2}>
                                 <List
                                     size="small"
-                                    header={<div>BID</div>}
+                                    header={<div className="bold">BID</div>}
                                     bordered
                                     dataSource={this.state.Cbid}
                                     renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
@@ -130,16 +118,16 @@ export class Options extends Component {
                             <Col span={3}>
                                 <List
                                     size="small"
-                                    header={<div>Strike</div>}
+                                    header={<div className="bold">Strike</div>}
                                     bordered
                                     dataSource={this.state.Cstrikes}
-                                    renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
+                                    renderItem={(item, index) => <List.Item key={index} className="strike bold">{item} </List.Item>}
                                 />
                             </Col>
                             <Col span={2}>
                                 <List
                                     size="small"
-                                    header={<div>ASK</div>}
+                                    header={<div className="bold">ASK</div>}
                                     bordered
                                     dataSource={this.state.Cask}
                                     renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
@@ -148,7 +136,7 @@ export class Options extends Component {
                             <Col span={1.5}>
                                 <List
                                     size="small"
-                                    header={<div>Volume</div>}
+                                    header={<div className="bold">Volume</div>}
                                     bordered
                                     dataSource={this.state.Cvolume}
                                     renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
@@ -157,7 +145,7 @@ export class Options extends Component {
                             <Col span={1}>
                                 <List
                                     size="small"
-                                    header={<div>Open</div>}
+                                    header={<div className="bold">Open</div>}
                                     bordered
                                     dataSource={this.state.CopenInterest}
                                     renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
@@ -167,50 +155,151 @@ export class Options extends Component {
                             <Col span={2}>
                                 <List
                                     size="small"
-                                    header={<div>BID</div>}
+                                    header={<div className="bold">BID</div>}
                                     bordered
-                                    dataSource={this.state.Cbid}
+                                    dataSource={this.state.Pbid}
                                     renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
                                 />
                             </Col>
                             <Col span={3}>
                                 <List
                                     size="small"
-                                    header={<div>Strike</div>}
+                                    header={<div className="bold">Strike</div>}
                                     bordered
-                                    dataSource={this.state.Cstrikes}
-                                    renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
+                                    dataSource={this.state.Pstrikes}
+                                    renderItem={(item, index) => <List.Item key={index} className="strike bold">{item} </List.Item>}
                                 />
                             </Col>
                             <Col span={2}>
                                 <List
                                     size="small"
-                                    header={<div>ASK</div>}
+                                    header={<div className="bold">ASK</div>}
                                     bordered
-                                    dataSource={this.state.Cask}
+                                    dataSource={this.state.Pask}
                                     renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
                                 />
                             </Col>
                             <Col span={1.5}>
                                 <List
                                     size="small"
-                                    header={<div>Volume</div>}
+                                    header={<div className="bold">Volume</div>}
                                     bordered
-                                    dataSource={this.state.Cvolume}
+                                    dataSource={this.state.Pvolume}
                                     renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
                                 />
                             </Col>
                             <Col span={1}>
                                 <List
                                     size="small"
-                                    header={<div>Open</div>}
+                                    header={<div className="bold">Open</div>}
                                     bordered
-                                    dataSource={this.state.CopenInterest}
+                                    dataSource={this.state.PopenInterest}
                                     renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
                                 />
                             </Col>
                             <Col span={2} />
-                        </Row>}
+                        </Row>
+                        <Row>
+                            <Col span={24} className="mid">
+                                <h3 className="bold">{this.state.info[1]}</h3>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={2} />
+                            <Col span={2}>
+                                <List
+                                    size="small"
+                                    header={<div className="bold">BID</div>}
+                                    bordered
+                                    dataSource={this.state.XCbid}
+                                    renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
+                                />
+                            </Col>
+                            <Col span={3}>
+                                <List
+                                    size="small"
+                                    header={<div className="bold">Strike</div>}
+                                    bordered
+                                    dataSource={this.state.XCstrikes}
+                                    renderItem={(item, index) => <List.Item key={index} className="strike bold">{item} </List.Item>}
+                                />
+                            </Col>
+                            <Col span={2}>
+                                <List
+                                    size="small"
+                                    header={<div className="bold">ASK</div>}
+                                    bordered
+                                    dataSource={this.state.XCask}
+                                    renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
+                                />
+                            </Col>
+                            <Col span={1.5}>
+                                <List
+                                    size="small"
+                                    header={<div className="bold">Volume</div>}
+                                    bordered
+                                    dataSource={this.state.XCvolume}
+                                    renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
+                                />
+                            </Col>
+                            <Col span={1}>
+                                <List
+                                    size="small"
+                                    header={<div className="bold">Open</div>}
+                                    bordered
+                                    dataSource={this.state.XCopenInterest}
+                                    renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
+                                />
+                            </Col>
+                            <Col span={1} />
+                            <Col span={2}>
+                                <List
+                                    size="small"
+                                    header={<div className="bold">BID</div>}
+                                    bordered
+                                    dataSource={this.state.XPbid}
+                                    renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
+                                />
+                            </Col>
+                            <Col span={3}>
+                                <List
+                                    size="small"
+                                    header={<div className="bold">Strike</div>}
+                                    bordered
+                                    dataSource={this.state.XPstrikes}
+                                    renderItem={(item, index) => <List.Item key={index} className="strike bold">{item} </List.Item>}
+                                />
+                            </Col>
+                            <Col span={2}>
+                                <List
+                                    size="small"
+                                    header={<div className="bold">ASK</div>}
+                                    bordered
+                                    dataSource={this.state.XPask}
+                                    renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
+                                />
+                            </Col>
+                            <Col span={1.5}>
+                                <List
+                                    size="small"
+                                    header={<div className="bold">Volume</div>}
+                                    bordered
+                                    dataSource={this.state.XPvolume}
+                                    renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
+                                />
+                            </Col>
+                            <Col span={1}>
+                                <List
+                                    size="small"
+                                    header={<div className="bold">Open</div>}
+                                    bordered
+                                    dataSource={this.state.XPopenInterest}
+                                    renderItem={(item, index) => <List.Item key={index}>{item} </List.Item>}
+                                />
+                            </Col>
+                            <Col span={2} />
+                        </Row>
+                        </div>
                     </div>}
             </div>
         )

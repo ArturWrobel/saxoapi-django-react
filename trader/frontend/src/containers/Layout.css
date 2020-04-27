@@ -1,3 +1,6 @@
+
+/*      ---------------------                  LAYOUT                       ------------------------*/
+
 body {
     background: inherit;
     font-family: arial, sans-serif;
@@ -5,6 +8,12 @@ body {
 
 .menu {
     font-weight: 700;
+}
+
+.header {
+    position: fixed;
+    width: 100%;
+    z-index: 1;
 }
 
 .footer {
@@ -15,16 +24,80 @@ body {
     padding-top: 0;
     background-color: #dde0e6;
     font-weight: 600;
-    color: rgb(133, 123, 123);
+    background-color: rgb(194, 197, 182);
     justify-content: center;
 }
 
 .content {
-    padding: 0 50px;
+    position: relative;
+    padding-top:50px;
+    padding-bottom: 2%;
+    background-color: #D7D9CE
 }
 
 .container {
     display: flex;  
     flex-direction: row;
     justify-content: space-between;
+}
+
+/*      ---------------------                  OPTIONS                       ------------------------*/
+
+.name {
+    font-weight: 700;
+    color: blue;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.change {
+    font-weight: 700;
+    color: rgb(16, 195, 0)
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.strike {
+    color: rgb(253, 73, 2)
+}
+
+.gridStyle {
+    width: 5%;
+    height: 15px;
+    font-weight: bold;
+    text-align: center;
+    background: #119DA4;
+    border: 1px solid #040404;
+}
+
+.col {
+    background:  #119DA4;
+    border: 1px solid #040404;
+}
+
+.mid {
+    background-color: rgb(194, 197, 182);
+    font-weight: 700
+}
+
+.sticky{
+    top: 60px;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+    background-color: rgb(194, 197, 182);
+}
+
+.sticky1{
+    top: 55px;
+    position: fixed;
+    margin-top: 50px;
+    z-index: 1;
+}
+
+.raws {
+    margin-top: 80px;
+    z-index: 1;
 }

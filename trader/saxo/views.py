@@ -123,9 +123,6 @@ class YahooData(APIView):
         opt = calls.to_json()
         #opt = json.dumps(opt)
         opt = json.loads(opt)
-        print(opt)
-        print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-        print(type(opt))
 
         return opt
 
@@ -142,21 +139,6 @@ def get_sp500(request, *args, **kwargs):
     x = json.loads(x)
     print(type(x))
     return JsonResponse(x, safe=False)
-
-
-def get_expiry(request, name):
-    tick = yf.Ticker("{}".format(name))
-    expiries = tick.options
-    expiries = json.dumps(expiries)
-    expiries = json.loads(expiries)
-
-    chain = tick.option_chain('2020-05-01')
-    calls = chain.calls
-    calls = calls.to_json()
-    calls = json.loads(calls)
-
-    return JsonResponse(expiries, safe=False)
-
 
 def get_yahoo_data(request, stock, exp):
     
@@ -180,16 +162,24 @@ def get_yahoo_data(request, stock, exp):
     calls = option.calls.fillna(0)
     puts = option.puts.fillna(0)
 
-    out = {"strike": calls['strike'].values.tolist(), "bid": calls['bid'].values.tolist(), "ask": calls['ask'].values.tolist(),
-           "openInterest": calls['openInterest'].values.tolist(), "volume": calls['volume'].values.tolist(), "inTheMoney": calls['inTheMoney'].values.tolist()}
+    print("Cena", info[1])
+    ycalls = calls.loc[calls['inTheMoney'] == True].tail(8)
+    yputs = puts.loc[puts['inTheMoney'] != True].tail(8)
+    xcalls = calls.loc[calls['inTheMoney'] != True].head(8)
+    xputs = puts.loc[puts['inTheMoney'] == True].head(8)
     
-    out = [calls['strike'], calls['bid'], calls['ask'], calls['openInterest'], calls['volume'], calls['inTheMoney'],
-            puts['strike'], puts['bid'], puts['ask'], puts['openInterest'], puts['volume'], puts['inTheMoney'], ]
+    out = [ycalls['strike'], ycalls['bid'], ycalls['ask'], ycalls['openInterest'], ycalls['volume'],
+            yputs['strike'], yputs['bid'], yputs['ask'], yputs['openInterest'], yputs['volume'],
+            xcalls['strike'], xcalls['bid'], xcalls['ask'], xcalls['openInterest'], xcalls['volume'],
+            xputs['strike'], xputs['bid'], xputs['ask'], xputs['openInterest'], xputs['volume']]
+        
     out = list(map(lambda x: x.fillna(0).values.tolist(), out))
     
     out = { "expiry": expiries, "info": info,
-            "Cstrike": out[0], "Cbid": out[1], "Cask": out[2], "CopenInterest": out[3], "Cvolume": out[4], "CinTheMoney": out[5],
-            "Pstrike": out[6], "Pbid": out[7], "Pask": out[8], "PopenInterest": out[9], "Pvolume": out[10], "PinTheMoney": out[11]}
+            "Cstrike": out[0], "Cbid": out[1], "Cask": out[2], "CopenInterest": out[3], "Cvolume": out[4],
+            "Pstrike": out[5], "Pbid": out[6], "Pask": out[7], "PopenInterest": out[8], "Pvolume": out[9],
+            "XCstrike": out[10], "XCbid": out[11], "XCask": out[12], "XCopenInterest": out[13], "XCvolume": out[14],
+            "XPstrike": out[15], "XPbid": out[16], "XPask": out[17], "XPopenInterest": out[18], "XPvolume": out[19]}
 
     out = json.dumps(out)
     out = json.loads(out)
@@ -198,36 +188,4 @@ def get_yahoo_data(request, stock, exp):
     print(type(out))
     print(out.keys())
     
-    return JsonResponse(out, safe=False)
-
-
-def xget_yahoo_data(request, stock, exp):
-    ticker = yf.Ticker("{}".format(stock))
-
-    info = ticker.info
-    
-    expiries = ticker.options
-    opt = ticker.option_chain(expiries[exp])
-    calls = opt.calls
-    puts = opt.puts
-
-    out = [calls['strike'], calls['bid'], calls['ask'], calls['openInterest'], calls['volume'], calls['inTheMoney'],
-            puts['strike'], puts['bid'], puts['ask'], puts['openInterest'], puts['volume'], puts['inTheMoney'], ]
-    
-    print(out, "ooooooooooooooooooooooooooooooooooo")
-    
-    out = list(map(lambda x: x.fillna(0).values.tolist(), out))
-    """ out = {"name": info["shortName"], "expiry": expiries, "previous": info["previousClose"], "bid": info['bid'], "sharesShort": info['sharesShort'],
-            "sharesPercentSharesOut": info['sharesPercentSharesOut'], "priceToBook": info['priceToBook'], "shortRatio": info['shortRatio'],
-            "shortPercentOfFloat": info['shortPercentOfFloat'],
-            "Cstrike": out[0], "Cbid": out[1], "Cask": out[2], "CopenInterest": out[3], "Cvolume": out[4], "CinTheMoney": out[5],
-            "Pstrike": out[6], "Pbid": out[7], "Pask": out[8], "PopenInterest": out[9], "Pvolume": out[10], "PinTheMoney": out[11]} """
-
-    out = { "Cstrike": out[0], "Cbid": out[1], "Cask": out[2], "CopenInterest": out[3], "Cvolume": out[4], "CinTheMoney": out[5]}
-    print(out, "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
-
-    out = json.dumps(out)
-    out = json.loads(out)
-    print(out)
-    print(type(out))
     return JsonResponse(out, safe=False)
