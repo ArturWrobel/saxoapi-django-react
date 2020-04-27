@@ -2,7 +2,7 @@
 /*      ---------------------                  LAYOUT                       ------------------------*/
 
 body {
-    background: inherit;
+    background-color: #D7D9CE;
     font-family: arial, sans-serif;
 }
 
@@ -92,6 +92,7 @@ body {
 
 .sticky1{
     top: 55px;
+    width: 100%;
     position: fixed;
     margin-top: 50px;
     z-index: 1;
@@ -100,4 +101,17 @@ body {
 .raws {
     margin-top: 80px;
     z-index: 1;
+}
+
+/*      ---------------------                  APEX Chart                       ------------------------*/
+
+.gridChart {
+    text-align: center;
+    width:50%;
+    height: 15px;
+    font-weight: bold;
+    text-align: center;
+    background: #119DA4;
+    border: 1px solid #040404;
+    padding: 8px 5px 27px 5px;
 }

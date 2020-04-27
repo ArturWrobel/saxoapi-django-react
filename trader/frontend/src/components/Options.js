@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { List, Row, Col, Card, Dropdown, Menu, Button, Divider } from 'antd';
+import { List, Row, Col, Card, Dropdown, Menu, Button } from 'antd';
 /* import Strikes from './Strikes' */
+/* 
+import '../containers/Layout.css' */
 
 export class Options extends Component {
     state = {
