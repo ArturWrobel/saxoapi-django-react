@@ -82,13 +82,13 @@ export class Options extends Component {
         return (
             <div>
                 {this.state.loading ?
-                    <h1>Loading...</h1> :
+                    <h1 className = "loading">Loading...</h1> :
                     <div>
                         <br />
                         <Row justify="space-between" className ="sticky">
                             <Col span={3}><h3>Price: {this.state.info[1]}</h3></Col>
                             <Col span={3}><h3>Previous: {this.state.info[2]}</h3></Col>
-                            <Col span={2}><p>Change:<h3 style={{ color: this.state.info[3] < 0 ? "red" : "green" }}>{this.state.info[3]}%</h3></p></Col>
+                            <Col span={2}><p>Change:<h3 className="bold" style={{ color: this.state.info[3] < 0 ? "red" : "blue" }}>{this.state.info[3]}%</h3></p></Col>
                             <Col span={4}><h2 className="name">{this.state.info[0]}</h2></Col>
                             <Col span={3}>{this.state.info[4]}</Col>
                             <Col span={3}>{this.state.info[5]}</Col>

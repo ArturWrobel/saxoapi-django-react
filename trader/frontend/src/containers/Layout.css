@@ -41,18 +41,23 @@ body {
     justify-content: space-between;
 }
 
+.loading {
+    margin-top: 300px;
+    font-size: 60px;
+    font-weight: 700
+}
 /*      ---------------------                  OPTIONS                       ------------------------*/
 
 .name {
     font-weight: 700;
-    color: blue;
+    color: #13505B;
     justify-content: center;
-    font-size: 25px;
+    font-size: 28px;
 }
 
 .change {
     font-weight: 700;
-    color: rgb(16, 195, 0)
+    color: black
 }
 
 .bold {
@@ -68,12 +73,13 @@ body {
     height: 15px;
     font-weight: bold;
     text-align: center;
-    background: #119DA4;
+    background: rgb(43, 203, 211);
     border: 1px solid #040404;
+    padding: 8px 5px 27px 5px;
 }
 
 .col {
-    background:  #119DA4;
+    background:  rgb(43, 203, 211);
     border: 1px solid #040404;
 }
 
@@ -111,7 +117,7 @@ body {
     height: 15px;
     font-weight: bold;
     text-align: center;
-    background: #119DA4;
+    background: rgb(43, 203, 211);
     border: 1px solid #040404;
     padding: 8px 5px 27px 5px;
 }

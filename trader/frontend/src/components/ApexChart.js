@@ -18,7 +18,7 @@ export class ApexChart extends Component {
         options: {
             chart: {
                 type: 'candlestick',
-                height: 350
+                height: '650px'
             },
             title: {
                 text: 'CandleStick Chart',
@@ -59,8 +59,28 @@ export class ApexChart extends Component {
         this.getAxios(21,5)
     }
 
-    onSubmitCross = (num) => event => {
+    onSubmitCross = (num, cross) => event => {
         console.log("clicked")
+        this.setState({
+            options: {
+                chart: {
+                    type: 'candlestick',
+                    height: '650px'
+                },
+                title: {
+                    text: cross,
+                    align: 'left'
+                },
+                xaxis: {
+                    type: 'datetime'
+                },
+                yaxis: {
+                    tooltip: {
+                        enabled: true
+                    }
+                },
+            },
+        })
         this.getAxios(num, this.state.mins)
     }
 
@@ -72,10 +92,19 @@ export class ApexChart extends Component {
     };
 
     render() {
+
+        const rates = [ [1343, "EURPLN"], [47, "USDPLN"], [21, "EURUSD"], [2071, "EURHUF"], [15, "EURCZK"],
+                        [31242, "EURRUB"], [31, "GBP"], [17, "EURGBP"], [42, "JPY"], [18, "EURJPY"],
+                        [39, "CHF"], [14, "EURCHF"], [4, "AUD"], [3946, "CAD"], [8957, "RUB"],
+                        [52872, "CNH"], [13928, "TRY"], [1296, "ZAR"], [8176, "XAU"], [8177, "XAG"]]
+
+        const buttons = rates.map(([index, rate]) => 
+                        <Card.Grid className="gridChart" onClick={this.onSubmitCross(index, rate)}>{rate}</Card.Grid>)
+
         return (
             <div>
                 {this.state.loading ?
-                    <h1>Loading...</h1> :
+                    <h1 className="loading">Loading...</h1> :
                     <div>
                         <Divider className = "radio" orientation="vertical">
                             <Radio.Group onChange={this.onChange} value={this.state.mins}>
@@ -89,32 +118,13 @@ export class ApexChart extends Component {
                         </Divider>
                         <Row>
                             <Col span={3}>
-                                <Card>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(1343)}>EURPLN</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(47)}>USDPLN</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(2071)}>EURHUF</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(15)}>EURCZK</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(31242)}>EURRUB</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(21)}>EURUSD</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(18)}>EURJPY</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(31)}>GBPUSD</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(17)}>EURGBP</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(14)}>EURCHF</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(42)}>JPY</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(39)}>CHF</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(4)}>AUD</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(3946)}>CAD</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(52872)}>CNH</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(8176)}>XAU</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(8177)}>XAG</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(8957)}>RUB</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(13928)}>TRY</Card.Grid>
-                                    <Card.Grid className="gridChart" onClick={this.onSubmitCross(1296)}>ZAR</Card.Grid>
+                                <Card  style = {{top: "10%"}}>
+                                {buttons}
                                 </Card>
                             </Col>
                             <Col span={21}>
                                 <div id="chart">
-                                    <ReactApexChart options={this.state.options} series={this.state.series} type="candlestick" height={600} />
+                                    <ReactApexChart options={this.state.options} series={this.state.series} type="candlestick" height={600}/>
                                 </div>
                             </Col>
                         </Row>

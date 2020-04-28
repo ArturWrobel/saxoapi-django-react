@@ -21,7 +21,7 @@ export class FetchData extends Component {
 
         axios.get("http://127.0.0.1:8000/api/portfolio/").then(res => {
             this.setState({ portfolio: res.data, loading: false });
-            console.log(res.data[0]['AccountValue']);
+            console.log(res.data);
         })
     }
     
@@ -38,7 +38,7 @@ export class FetchData extends Component {
                 <br/>
                 <div>
                 {this.state.loading || !this.state.dane ? (
-                    <div>Loading...</div>
+                    <div className = "loading">Loading...</div>
                 ) : (
                         <div>
                             <p>Account value: {this.state.portfolio[0]['AccountValue']}</p>

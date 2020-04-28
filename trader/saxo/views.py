@@ -163,10 +163,10 @@ def get_yahoo_data(request, stock, exp):
     puts = option.puts.fillna(0)
 
     print("Cena", info[1])
-    ycalls = calls.loc[calls['inTheMoney'] == True].tail(8)
-    yputs = puts.loc[puts['inTheMoney'] != True].tail(8)
-    xcalls = calls.loc[calls['inTheMoney'] != True].head(8)
-    xputs = puts.loc[puts['inTheMoney'] == True].head(8)
+    ycalls = calls.loc[calls['inTheMoney'] == True].tail(10)
+    yputs = puts.loc[puts['inTheMoney'] != True].tail(10)
+    xcalls = calls.loc[calls['inTheMoney'] != True].head(10)
+    xputs = puts.loc[puts['inTheMoney'] == True].head(10)
     
     out = [ycalls['strike'], ycalls['bid'], ycalls['ask'], ycalls['openInterest'], ycalls['volume'],
             yputs['strike'], yputs['bid'], yputs['ask'], yputs['openInterest'], yputs['volume'],
