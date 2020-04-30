@@ -3,7 +3,10 @@ import axios from 'axios'
 
 import CardList from './CardList'
 
-export class FetchData extends Component {
+import { Row, Col, Card } from 'antd';
+
+
+export class Home extends Component {
 
     state = {
         loading: true,
@@ -34,13 +37,32 @@ export class FetchData extends Component {
         
         return (
             <div>
-                <CardList/>
-                <br/>
                 <div>
                 {this.state.loading || !this.state.dane ? (
                     <div className = "loading">Loading...</div>
                 ) : (
                         <div>
+
+<div className="site-card-wrapper">
+    <Row gutter={16}>
+      <Col span={8}>
+        <Card title="Card title" bordered={false}>
+          Card content
+        </Card>
+      </Col>
+      <Col span={8}>
+        <Card title="Card title" bordered={false}>
+          Card content
+        </Card>
+      </Col>
+      <Col span={8}>
+        <Card title="Card title" bordered={false}>
+          Card content
+        </Card>
+      </Col>
+    </Row>
+  </div>
+
                             <p>Account value: {this.state.portfolio[0]['AccountValue']}</p>
                             <p>Account value month: {this.state.portfolio[0]['AccountValueMonth']}</p>
                             {tran}
@@ -48,16 +70,13 @@ export class FetchData extends Component {
                             {this.state.dane.Time[0]}
                             <br />
                             {this.state.dane.CloseAsk[0]}
-                            <br/>
-                            {this.state.dane.CloseAsk.map((bid, i) => <li key ={i}>{bid}</li>)}
-                            <br />
+                                                        <br />
                             {this.state.dane.Time}
                             <br />
                             {this.state.dane.CloseAsk}
                             <hr />
                             {doubled}
                             <hr />
-                            {this.state.dane.CloseAsk.map((item, index) =><div key ={index}>{item}</div>)}
                             <hr />
                             {this.state.dane.CloseAsk.length}
                         </div>
@@ -70,4 +89,4 @@ export class FetchData extends Component {
     }
 }
 
-export default FetchData
+export default Home

@@ -24,8 +24,9 @@ SECRET_KEY = 'ofm2s9^xapg!y^1bi)cbu)8$uja$w^ca@i7@(3e)for8p6e=ul'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+#DEBUG = int(os.environ.get('DEBUG', default=1))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -130,5 +131,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/build/static'),
     os.path.join(BASE_DIR, 'static'),
 ]
+
+#STATIC_ROOT = 'static'
 
 CORS_ORIGIN_ALLOW_ALL = True

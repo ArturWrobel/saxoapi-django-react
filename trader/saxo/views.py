@@ -76,7 +76,7 @@ def get_saxo_data(cross, horiz):
         df.drop(["CloseBid", "HighBid", "LowBid",
                  "OpenBid"], axis=1, inplace=True)
         df.to_csv('./saxo/data/data.csv')
-        print(df)
+        """ print(df) """
     return df
 
 
@@ -137,7 +137,7 @@ def get_sp500(request, *args, **kwargs):
     x = x.to_list()
     x = json.dumps(x, indent=2)
     x = json.loads(x)
-    print(type(x))
+
     return JsonResponse(x, safe=False)
 
 def get_yahoo_data(request, stock, exp):
@@ -162,7 +162,6 @@ def get_yahoo_data(request, stock, exp):
     calls = option.calls.fillna(0)
     puts = option.puts.fillna(0)
 
-    print("Cena", info[1])
     ycalls = calls.loc[calls['inTheMoney'] == True].tail(10)
     yputs = puts.loc[puts['inTheMoney'] != True].tail(10)
     xcalls = calls.loc[calls['inTheMoney'] != True].head(10)
@@ -184,8 +183,16 @@ def get_yahoo_data(request, stock, exp):
     out = json.dumps(out)
     out = json.loads(out)
 
-    print(out)
+    """ print(out)
     print(type(out))
-    print(out.keys())
+    print(out.keys()) """
     
     return JsonResponse(out, safe=False)
+
+""" def fx_sma_bot():
+    short_sma = 30
+    long_sma = 50
+    SMAs=[short_sma, long_sma]
+    
+    for i in SMAs:
+        df["SMA_"+str(i)] = df.iloc[:,4].rolling(window=i).mean() """
