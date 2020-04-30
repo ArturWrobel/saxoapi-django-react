@@ -121,3 +121,9 @@ body {
     border: 1px solid #040404;
     padding: 8px 5px 27px 5px;
 }
+
+/*      ---------------------                  HOME                       ------------------------*/
+
+.cardCol {
+    background-color:rgb(43, 203, 211);
+}

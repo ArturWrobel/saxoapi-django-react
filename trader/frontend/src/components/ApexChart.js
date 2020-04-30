@@ -128,6 +128,7 @@ export class ApexChart extends Component {
                                 </div>
                             </Col>
                         </Row>
+                        <Divider className = "radio" orientation="vertical"/>                        
                     </div>
                 }
             </div>
